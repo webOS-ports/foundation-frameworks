@@ -18,7 +18,7 @@
 
 var EnvironmentUtils = exports.EnvironmentUtils = {
 	runtime: function() {
-		if (typeof root !== "undefined" && root.process && root.process.version) {
+		if (typeof global !== "undefined" && global.process && global.process.version) {
 			return "node";
 		}
 		
