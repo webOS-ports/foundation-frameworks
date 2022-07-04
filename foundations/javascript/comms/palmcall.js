@@ -58,6 +58,7 @@ var PalmCall = exports.Comms.PalmCall =
 	{		
 		return new Future().now(this, function(future)
 		{
+            console.log("Herrie _callTriton this._handle: "+this._handle);
 			Assert.requireString(url, "PalmCall.call: url parameter must be a string, was #{type}",{type: typeof url});
 			Assert.requireString(cmd, "PalmCall.call: cmd parameter must be a string, was #{type}",{type: typeof cmd});
 			Assert.requireJSONObject(args, "PalmCall.call: args parameter must be a valid JSON object, was #{type}", {type: typeof args});
@@ -71,21 +72,23 @@ var PalmCall = exports.Comms.PalmCall =
 
 			if (!this._handle)
 			{
+                console.log("Herrie _callTriton no handle");
 				console.error("Foundations.PalmCall: Service bus handle not set! Use PalmCall.register(handle) to set up a bus handle");
-				this._handle = new webOS.Handle("", false);
+				this._handle = new webOS.Handle("");
+                console.log("Herrie _callTriton this._handle after: "+this._handle);
 			}
-			//console.log(url, JSON.stringify(args));
+			console.log(url, JSON.stringify(args));
 			var callFn;
 			if (args.subscribe===true || args.watch===true) {
-				//console.log("PalmCall: Using call");
+				console.log("PalmCall: Using call");
 				callFn = this._handle.call;
 			} else {
-				//console.log("PalmCall: Using callOneReply");
+				console.log("PalmCall: Using callOneReply");
 				callFn = this._handle.callOneReply;
 			}
 			future.pending = callFn.call(this._handle, url, JSON.stringify(args), future.callback(function(response)
 			{
-				//console.log("--", response.payload());
+				console.log("--", response.payload());
 				if (future.pending)
 				{
 					var payload;
@@ -131,6 +134,7 @@ var PalmCall = exports.Comms.PalmCall =
 	_callNode: function(url, cmd, args) {
 		return new Future().now(this, function(future)
 		{
+            console.log("Herrie _callNode this._handle: "+this._handle);
 			Assert.requireString(url, "PalmCall.call: url parameter must be a string, was #{type}",{type: typeof url});
 			Assert.requireString(cmd, "PalmCall.call: cmd parameter must be a string, was #{type}",{type: typeof cmd});
 			Assert.requireJSONObject(args, "PalmCall.call: args parameter must be a valid JSON object, was #{type}", {type: typeof args});
@@ -144,19 +148,21 @@ var PalmCall = exports.Comms.PalmCall =
 
 			if (!this._handle)
 			{
+                console.log("Herrie _callNode NO this._handle");
 				console.error("Foundations.PalmCall: Service bus handle not set! Use PalmCall.register(handle) to set up a bus handle");
-				this._handle = new PalmBus.Handle("", false);
+				this._handle = new PalmBus.Handle("");
+                console.log("Herrie _callNode this._handle: "+this._handle);
 			}
-			//console.log(url, JSON.stringify(args));
+			console.log(url, JSON.stringify(args));
 			var callFn;
 			if (args.subscribe===true) {
-				//console.log("PalmCall: Using subscribe");
+				console.log("PalmCall: Using subscribe");
 			    callFn = this._handle.subscribe;
 			} else if(args.watch===true) {
-				//console.log("PalmCall: Using watch");
+				console.log("PalmCall: Using watch");
 				callFn = this._handle.watch;
 			} else {
-				//console.log("PalmCall: Using call");
+				console.log("PalmCall: Using call");
 				callFn = this._handle.call;
 			}
 			future.pending = callFn.call(this._handle, url, JSON.stringify(args));
@@ -208,10 +214,12 @@ var PalmCall = exports.Comms.PalmCall =
 		if (!EnvironmentUtils.isBrowser())
 		{
 		    if (EnvironmentUtils.isTriton()) {
+                console.log("Herrie EnvironmentUtils.isTriton(): "+EnvironmentUtils.isTriton());
     			PalmCall.call = PalmCall._callTriton;
     			PalmCall.cancel = PalmCall._cancelTriton;
     			PalmCall.register = PalmCall._registerTriton;		        
 		    } else {
+                console.log("Herrie EnvironmentUtils palmbus");
 				PalmBus = require('palmbus');
     			PalmCall.call = PalmCall._callNode;
     			PalmCall.cancel = PalmCall._cancelNode;
@@ -220,6 +228,7 @@ var PalmCall = exports.Comms.PalmCall =
 		}
 		else
 		{
+            console.log("Herrie callMojo");
 			PalmCall.call = PalmCall._callMojo;
 			PalmCall.cancel = PalmCall._cancelMojo;
 			PalmCall.register = function() {};
