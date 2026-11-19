@@ -99,7 +99,7 @@ var PalmCall = exports.Comms.PalmCall =
 					}
 					if (payload.returnValue === false || payload.errorCode || payload.errorText)
 					{
-						err = Err.create(payload.errorCode || -1, url + " " + JSON.stringify(args) + ": " + (payload.errorText || "Unknown PalmCall failure"), payload.exception);
+						err = Err.create(payload.errorCode || -1, url + ": " + (payload.errorText || "Unknown PalmCall failure"), payload.exception);
 						err.response = payload;
 						throw err;
 					}
@@ -173,7 +173,7 @@ var PalmCall = exports.Comms.PalmCall =
 				}
 				if (payload.returnValue === false || payload.errorCode || payload.errorText)
 				{
-					err = Err.create(payload.errorCode || -1, url + " " + JSON.stringify(args) + ": " + (payload.errorText || "Unknown PalmCall failure"), payload.exception);
+					err = Err.create(payload.errorCode || -1, url + ": " + (payload.errorText || "Unknown PalmCall failure"), payload.exception);
 					err.response = payload;
 					throw err;
 				}
